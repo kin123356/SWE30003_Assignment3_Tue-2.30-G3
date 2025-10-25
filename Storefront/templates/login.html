@@ -2,30 +2,32 @@
 <html>
 <head>
     <title>Login Page</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>Welcome to Login Page!</h1>
-    <nav>
+    <h1 class="header">Welcome to Login Page!</h1>
+
+    <nav style="text-align: center;">
         <a href="/">Home</a> |
         <a href="/login">Login</a> |
         <a href="/signup">Signup</a>
     </nav>
 
-    <form method="POST">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
+    <div class="formContainer">
+        <form method="POST" class="accountForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
 
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
 
-        <input type="submit" value="Sign-up!">
-    </form>
+            <input type="submit" value="Login">
+        </form>
+    </div>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="flash">
                 {{ messages[-1] }}
-            </div>
         {% endif %}
     {% endwith %}
 

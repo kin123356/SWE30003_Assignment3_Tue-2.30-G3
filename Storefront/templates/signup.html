@@ -2,30 +2,37 @@
 <html>
 <head>
     <title>Sign-up Page</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>Welcome to Sign-up Page!</h1>
-    <nav>
+    <h1 class="header">Welcome to Sign-up Page!</h1>
+
+    <nav style="text-align: center;">
         <a href="/">Home</a> |
         <a href="/login">Login</a> |
         <a href="/signup">Signup</a>
     </nav>
-    <form method="POST">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
 
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
+    <div class="formContainer">
+        <form method="POST" class="accountForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name"><br>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br>
 
-        <label for="user">User</label>
-        <input type="radio" id="user" name="account" value="user"><br>
-        <label for="admin">Admin</label>
-        <input type="radio" id="admin" name="account" value="admin"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
 
-        <input type="submit" value="Sign-up!">
-    </form>
+            <div class="radio-group">
+            <label for="user">User</label>
+            <input type="radio" id="user" name="account" value="user">
+            <label for="admin">Admin</label>
+            <input type="radio" id="admin" name="account" value="admin"><br>
+            </div>
+
+            <input type="submit" value="Sign-up!">
+        </form>
+    </div>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
