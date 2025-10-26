@@ -4,7 +4,7 @@
             "name": "Bread",
             "description": "A Loaf of Bread",
             "price": 3.0,
-            "stock": -3,
+            "stock": -9,
             "is_available": true
         },
         "2": {

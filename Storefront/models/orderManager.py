@@ -10,39 +10,29 @@ class OrderManager:
                 json.dump({"orders": []}, f)
 
     def load_orders(self):
+        if not os.path.exists(self.filename):
+            return []
         with open(self.filename, 'r') as f:
             data = json.load(f)
-        return data['orders']
+            # Use the from_dict method to reconstruct Order objects
+            return [Order.from_dict(order_data) for order_data in data.get('orders', [])]
 
     def save_orders(self, orders):
         with open(self.filename, 'w') as f:
-            json.dump({"orders": orders}, f, indent=4)
+            json.dump({"orders": [order.to_dict() for order in orders]}, f, indent=4)
 
     def place_order(self, order: Order):
         """Save an order to the JSON file."""
         orders = self.load_orders()
-        order_dict = order.to_dict()
-        # Ensure items are serializable
-        order_dict['items'] = [
-            {'product': item['product'].to_dict(), 'quantity': item['quantity']}
-            for item in order.items
-        ]
-        orders.append(order_dict)
+        orders.append(order)
         self.save_orders(orders)
 
     def get_order_by_id(self, order_id):
         """Retrieve a single order by its ID."""
         orders = self.load_orders()
         for order_data in orders:
-            if order_data['order_id'] == order_id:
-                # Reconstruct the Order object
-                return Order(
-                    user_id=order_data['user_id'],
-                    items=order_data['items'],
-                    total=order_data['total'],
-                    order_id=order_data['order_id'],
-                    status=order_data['status']
-                )
+            if order_data.order_id == order_id:
+                return order_data
         return None
 
     def update_order_status(self, order_id, status):

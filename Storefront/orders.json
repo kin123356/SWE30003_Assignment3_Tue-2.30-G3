@@ -9,7 +9,8 @@
                         "name": "Bread",
                         "description": "A Loaf of Bread",
                         "price": 3.0,
-                        "stock": 1
+                        "stock": 1,
+                        "is_available": true
                     },
                     "quantity": 1
                 },
@@ -18,7 +19,8 @@
                         "name": "Cheese",
                         "description": "1 Block of Cheese",
                         "price": 2.0,
-                        "stock": -1
+                        "stock": -1,
+                        "is_available": true
                     },
                     "quantity": 1
                 }
@@ -36,7 +38,8 @@
                         "name": "Bread",
                         "description": "A Loaf of Bread",
                         "price": 3.0,
-                        "stock": 0
+                        "stock": 0,
+                        "is_available": true
                     },
                     "quantity": 3
                 },
@@ -45,7 +48,8 @@
                         "name": "Cheese",
                         "description": "1 Block of Cheese",
                         "price": 2.0,
-                        "stock": -2
+                        "stock": -2,
+                        "is_available": true
                     },
                     "quantity": 2
                 },
@@ -54,13 +58,52 @@
                         "name": "Eggs",
                         "description": "4 Large Eggs",
                         "price": 7.0,
-                        "stock": 4
+                        "stock": 4,
+                        "is_available": true
                     },
                     "quantity": 1
                 }
             ],
             "total": 20.0,
             "date": "2025-10-26T20:20:56.803251",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761486961",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": -3,
+                        "is_available": true
+                    },
+                    "quantity": 3
+                }
+            ],
+            "total": 9.0,
+            "date": "2025-10-26T21:56:01.649021",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761487026",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": -6,
+                        "is_available": true
+                    },
+                    "quantity": 3
+                }
+            ],
+            "total": 9.0,
+            "date": "2025-10-26T21:57:06.592401",
             "status": "Shipped"
         }
     ]
