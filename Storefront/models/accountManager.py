@@ -24,7 +24,7 @@ class AccountManager:
     #Checks if account exists in file, then adds it if it doesnt
     def create_user(self, user: User):
         data = self.load_accounts()
-        if user.username in data["users"]:
+        if user.username in data["users"] or user.username in data["admins"]:
             return False
         data["users"][user.username] = user.to_dict()
         self.save_accounts(data)
@@ -32,7 +32,7 @@ class AccountManager:
 
     def create_admin(self, admin: Admin):
         data = self.load_accounts()
-        if admin.username in data["admins"]:
+        if admin.username in data["admins"] or admin.username in data["users"]:
             return False
         data["admins"][admin.username] = admin.to_dict()
         self.save_accounts(data)

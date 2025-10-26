@@ -1,0 +1,28 @@
+{
+    "products": {
+        "1": {
+            "name": "Bread",
+            "description": "A Loaf of Bread",
+            "price": 3.0,
+            "stock": 6
+        },
+        "2": {
+            "name": "Milk",
+            "description": "1L Carton of Milk",
+            "price": 2.0,
+            "stock": 4
+        },
+        "3": {
+            "name": "Eggs",
+            "description": "A Carton of Eggs",
+            "price": 7.0,
+            "stock": 9
+        },
+        "4": {
+            "name": "Water",
+            "description": "A Bottle of Water",
+            "price": 1.5,
+            "stock": 12
+        }
+    }
+}

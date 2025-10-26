@@ -10,7 +10,22 @@
         <a href="/login">Login</a> |
         <a href="/signup">Signup</a> |
         <a href="/userDashboard">User Dashboard</a> |
-        <a href="/adminDashboard">Admin Dashboard</a> 
+        <a href="/adminDashboard">Admin Dashboard</a> |
+        <a href="/cart">Cart Page</a> |
+        <a class="logout" href="/logout">Logout</a>
     </nav>
+
+    <h1>Product Catalogue</h1>
+    <div class="product-list">
+        {% for name, product in products.items() %}
+            <div class="product-card">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Price: ${{ product.price }}</p>
+                <p>Stock: {{ product.stock }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
 </body>
 </html>
