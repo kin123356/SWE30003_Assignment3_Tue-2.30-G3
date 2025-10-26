@@ -1,6 +1,12 @@
 {
     "users": {
-        
+        "khanhhuyenn035@gmail.com": {
+            "first_name": "kin",
+            "last_name": "nguyen",
+            "email": "khanhhuyenn035@gmail.com",
+            "phone": "0413402211",
+            "password": "12345678"
+        }
     },
     "admins": {
         "admin@example.com": {

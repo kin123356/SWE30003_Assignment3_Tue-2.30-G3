@@ -4,13 +4,13 @@
             "name": "Bread",
             "description": "A Loaf of Bread",
             "price": 3.0,
-            "stock": 1
+            "stock": 0
         },
         "2": {
             "name": "Cheese",
             "description": "1 Block of Cheese",
             "price": 2.0,
-            "stock": -1
+            "stock": -2
         },
         "3": {
             "name": "Eggs",

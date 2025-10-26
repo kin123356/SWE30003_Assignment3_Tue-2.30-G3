@@ -1,5 +1,31 @@
 {
     "orders": [
-        
+        {
+            "order_id": "1761472391",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": 1
+                    },
+                    "quantity": 1
+                },
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -1
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 5.0,
+            "date": "2025-10-26T20:53:11.185830",
+            "status": "Shipped"
+        }
     ]
 }
