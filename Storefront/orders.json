@@ -62,6 +62,44 @@
             "total": 20.0,
             "date": "2025-10-26T20:20:56.803251",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761486815",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -4,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 2.0,
+            "date": "2025-10-27T00:53:35.935684",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761486922",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -5,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 2.0,
+            "date": "2025-10-27T00:55:22.297106",
+            "status": "Shipped"
         }
     ]
 }
