@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recover Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Recover Your Account</h1>
+    <form method="POST" class="accountForm">
+        <label for="email">Enter your email address:</label>
+        <input type="text" id="email" name="email" required>
+        <input type="submit" value="Recover Account">
+    </form>
+    <a href="{{ url_for('login') }}">Back to Login</a>
+</body>
+</html>

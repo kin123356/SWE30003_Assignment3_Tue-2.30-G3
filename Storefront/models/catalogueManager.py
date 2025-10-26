@@ -25,15 +25,6 @@ class CatalogueManager:
         self.save_products(products)
         return True
 
-    #Update product stock value
-    def update_stock(self, product_name, new_stock):
-        products = self.load_products()
-        if product_name not in products:
-            return False
-        products[product_name]["stock"] = new_stock
-        self.save_products(products)
-        return True
-
     #Delete product in json file
     def delete_product(self, product_name):
         products = self.load_products()

@@ -1,70 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h1>Welcome Admin, {{ username }}!</h1>
+<body class="admin-dashboard">
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Storefront</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
 
-    <nav>
-        <a href="/">Home</a> |
-        <a class="logout" href="/logout">Logout</a>
-    </nav>
-    <p>features for admin will go here.</p>
+    <div class="container">
+        <div class="overview-cards">
+            <div class="card">
+                <h3>Total Products</h3>
+                <p>{{ products|length }}</p>
+            </div>
+            <div class="card">
+                <h3>Total Sales</h3>
+                <p>${{ "%.2f"|format(total_sales) }}</p>
+            </div>
+        </div>
 
-    <h2>Add New Product</h2>
-    <form method="POST">
-        <input type="hidden" name="add_product">
-        <label for="name">Name:</label><input type="text" id="name" name="name" required><br>
-        <labe for="price">Price:</label><input type="number" id="price" name="price" required><br>
-        <label for="stock">Quantity:</label><input type="number" id="stock" name="stock" required><br>
-        <label for="description">Description:</label><input type="text" id="description" name="description" required><br>
-        <input type="submit" value="Add Product">
-    </form>
+        <h2>Manage Products</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products.values() %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>${{ "%.2f"|format(product.price) }}</td>
+                    <td>{{ product.stock }}</td>
+                    <td class="actions">
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="delete_product">
+                            <input type="hidden" name="product_id" value="{{ product.name }}">
+                            <button type="submit" class="btn-secondary">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+        <h2>Add Product</h2>
+        <form method="POST" class="form-box" style="background-color: #f9f6ee; color: #4a4a4a; margin-bottom: 30px;">
+            <input type="hidden" name="add_product">
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" step="0.01" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock Quantity</label>
+                <input type="number" id="stock" name="stock" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" required>
+            </div>
+            <button type="submit" class="btn">Save Product</button>
+        </form>
 
-    <h2>Update Product Stock</h2>
-    <table border="1">
-        <tr>
-            <th>Product ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Current Stock</th>
-            <th>New Stock</th>
-        </tr>
-
-        {% for pid, product in products.items() %}
-        <tr>
-            <td>{{ pid }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ "%.2f"|format(product.price) }}</td>
-            <td>{{ product.stock }}</td>
-            <td>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="update_stock">
-                    <input type="hidden" name="product_id" value="{{ pid }}">
-                    <input type="number" name="quantity" min="0" required>
-                    <input type="submit" value="Update">
-                </form>
-
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="delete_product">
-                    <input type="hidden" name="product_id" value="{{ pid }}">
-                    <input type="submit" value="Delete">
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+        <h2>Create New Admin</h2>
+        <form method="POST" class="form-box" style="background-color: #f9f6ee; color: #4a4a4a;">
+            <input type="hidden" name="create_admin">
+            <div class="form-group">
+                <label for="admin_first_name">First Name</label>
+                <input type="text" id="admin_first_name" name="admin_first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="admin_last_name">Last Name</label>
+                <input type="text" id="admin_last_name" name="admin_last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="admin_email">Email</label>
+                <input type="text" id="admin_email" name="admin_email" required>
+            </div>
+            <div class="form-group">
+                <label for="admin_password">Password</label>
+                <input type="password" id="admin_password" name="admin_password" required>
+            </div>
+            <button type="submit" class="btn">Create Admin</button>
+        </form>
+    </div>
 </body>
 </html>

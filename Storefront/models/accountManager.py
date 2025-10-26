@@ -21,32 +21,35 @@ class AccountManager:
         with open(self.filename, "w") as f:
             json.dump(accounts, f, indent=4)
 
-    #Checks if account exists in file, then adds it if it doesnt
     def create_user(self, user: User):
+        """Create a new user with email as the primary key."""
         data = self.load_accounts()
-        if user.username in data["users"] or user.username in data["admins"]:
-            return False
-        data["users"][user.username] = user.to_dict()
+        if user.email in data["users"] or user.email in data["admins"]:
+            return False  # User already exists
+        data["users"][user.email] = user.to_dict()
         self.save_accounts(data)
         return True
 
     def create_admin(self, admin: Admin):
         data = self.load_accounts()
-        if admin.username in data["admins"] or admin.username in data["users"]:
+        if admin.email in data["admins"] or admin.email in data["users"]:
             return False
-        data["admins"][admin.username] = admin.to_dict()
+        data["admins"][admin.email] = admin.to_dict()
         self.save_accounts(data)
         return True
 
-    def authenticate(self, username, password):
-            data = self.load_accounts()
+    def recover_account(self, email):
+        """Simulate sending a password recovery email."""
+        # In a real app, you would find the user by email and send a reset link.
+        print(f"Simulating password recovery for email: {email}")
+        return True
 
-            # check admin list
-            if username in data["admins"] and data["admins"][username]["password"] == password:
-                return "admin"
 
-            # check user list
-            if username in data["users"] and data["users"][username]["password"] == password:
-                return "user"
-
-            return None
+    def authenticate_by_email(self, email, password):
+        """Authenticate a user by their email and password."""
+        data = self.load_accounts()
+        if email in data['users'] and data['users'][email]['password'] == password:
+            return data['users'][email], 'user'
+        if email in data['admins'] and data['admins'][email]['password'] == password:
+            return data['admins'][email], 'admin'
+        return None, None

@@ -1,4 +1,19 @@
 {
-    "users": {},
-    "admins": {}
+    "users": {
+        "angelo.parlade@gmail.com": {
+            "first_name": "Angelo",
+            "last_name": "Parlade",
+            "email": "angelo.parlade@gmail.com",
+            "phone": "0493426212",
+            "password": "Testing"
+        }
+    },
+    "admins": {
+        "admin@example.com": {
+            "first_name": "Admin",
+            "last_name": "User",
+            "email": "admin@example.com",
+            "password": "admin"
+        }
+    }
 }

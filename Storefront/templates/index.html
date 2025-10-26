@@ -1,31 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Convenience Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome to My Flask App!</h1>
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/login">Login</a> |
-        <a href="/signup">Signup</a> |
-        <a href="/userDashboard">User Dashboard</a> |
-        <a href="/adminDashboard">Admin Dashboard</a> |
-        <a href="/cart">Cart Page</a> |
-        <a class="logout" href="/logout">Logout</a>
-    </nav>
+    <header>
+        <h1>Online Convenience Store</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            {% if 'first_name' in session %}
+                <a href="{{ url_for('userDashboard') }}">Account</a>
+                {% if session.get('role') == 'admin' %}
+                    <a href="{{ url_for('adminDashboard') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
 
-    <h1>Product Catalogue</h1>
-    <div class="product-list">
-        {% for name, product in products.items() %}
-            <div class="product-card">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description }}</p>
-                <p>Price: ${{ product.price }}</p>
-                <p>Stock: {{ product.stock }}</p>
-            </div>
-        {% endfor %}
+    <div class="container">
+        <div class="product-grid">
+            {% for product in products.values() %}
+                <div class="product-card" data-product-name="{{ product.name }}">
+                    <img src="{{ url_for('static', filename='images/' + product.name.lower() + '.png') }}" alt="{{ product.name }}" onerror="this.style.display='none'"/>
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">${{ "%.2f"|format(product.price) }}</p>
+                    
+                    {% if 'first_name' in session %}
+                        {% set item_in_cart = cart_items.get(product.name) %}
+                        
+                        <button class="btn add-to-cart-btn {{ 'd-none' if item_in_cart }}">Add to Cart</button>
+                        
+                        <div class="quantity-selector {{ 'visible' if item_in_cart }}">
+                            <button class="quantity-btn minus-btn">-</button>
+                            <input type="number" class="quantity-input" value="{{ item_in_cart.quantity if item_in_cart else 0 }}" min="0" max="10">
+                            <button class="quantity-btn plus-btn">+</button>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn">Add to Cart</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCards = document.querySelectorAll('.product-card');
+
+            productCards.forEach(card => {
+                const productName = card.dataset.productName;
+                const addToCartBtn = card.querySelector('.add-to-cart-btn');
+                const quantitySelector = card.querySelector('.quantity-selector');
+                const quantityInput = card.querySelector('.quantity-input');
+                const minusBtn = card.querySelector('.minus-btn');
+                const plusBtn = card.querySelector('.plus-btn');
+
+                addToCartBtn.addEventListener('click', () => {
+                    updateCart(productName, 1, () => {
+                        addToCartBtn.style.display = 'none';
+                        quantitySelector.style.display = 'flex';
+                        quantityInput.value = 1;
+                    });
+                });
+
+                minusBtn.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 0) {
+                        updateCart(productName, currentValue - 1, () => {
+                            quantityInput.value = currentValue - 1;
+                            if (currentValue - 1 === 0) {
+                                addToCartBtn.style.display = 'block';
+                                quantitySelector.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue < 10) {
+                        updateCart(productName, currentValue + 1, () => {
+                            quantityInput.value = currentValue + 1;
+                        });
+                    }
+                });
+
+                quantityInput.addEventListener('change', () => {
+                    let value = parseInt(quantityInput.value);
+                    if (isNaN(value) || value < 0) value = 0;
+                    if (value > 10) value = 10;
+                    
+                    updateCart(productName, value, () => {
+                        quantityInput.value = value;
+                        if (value === 0) {
+                            addToCartBtn.style.display = 'block';
+                            quantitySelector.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            function updateCart(productName, quantity, callback) {
+                fetch(`/update_cart/${productName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity: quantity }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (callback) callback();
+                    } else {
+                        console.error('Error updating cart:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </body>
 </html>

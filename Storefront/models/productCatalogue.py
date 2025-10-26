@@ -25,5 +25,12 @@ class ProductCatalogue:
     def load_products(self):
         with open(self.filename, "r") as f:
             data = json.load(f)
-        return data["products"]
-        
+        return {k: Product.from_dict(v) for k, v in data["products"].items()}
+
+    def get_product(self, product_name: str) -> Product | None:
+        """Retrieve a single product by its name."""
+        products = self.load_products()
+        for product in products.values():
+            if product.name == product_name:
+                return product
+        return None

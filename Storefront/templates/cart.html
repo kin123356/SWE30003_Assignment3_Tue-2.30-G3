@@ -1,18 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cart Page</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1 class="header">Welcome to the Cart Page!</h1>
+    <header>
+        <h1>Online Convenience Store</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            {% if 'first_name' in session %}
+                <a href="{{ url_for('userDashboard') }}">Account</a>
+                {% if session.get('role') == 'admin' %}
+                    <a href="{{ url_for('adminDashboard') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
 
-    <nav style="text-align: center;">
-        <a href="/">Home</a> |
-        <a href="/login">Login</a> |
-        <a href="/signup">Signup</a>
-    </nav>
+    <div class="container">
+        <h1>Your Shopping Cart</h1>
+        {% if cart_items %}
+            <div class="cart-page">
+                <div class="cart-items">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                                <tr data-product-name="{{ item.product.name }}">
+                                    <td>
+                                        <div class="cart-item-product">
+                                            <img src="{{ url_for('static', filename='images/' + item.product.name.lower() + '.png') }}" alt="{{ item.product.name }}">
+                                            <div>
+                                                <h3>{{ item.product.name }}</h3>
+                                                <p>${{ "%.2f"|format(item.product.price) }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="quantity-selector visible">
+                                            <button class="quantity-btn minus-btn">-</button>
+                                            <input type="number" class="quantity-input" value="{{ item.quantity }}" min="0" max="10">
+                                            <button class="quantity-btn plus-btn">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="item-total">${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+                                    <td><button class="remove-item-btn">Remove</button></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-summary">
+                    <h2>Order Summary</h2>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <form action="{{ url_for('checkout') }}" method="post">
+                        <button type="submit" class="btn">Proceed to Checkout</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p>Your cart is empty.</p>
+            <a href="{{ url_for('home') }}">Continue Shopping</a>
+        {% endif %}
+    </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.cart-items tr[data-product-name]').forEach(row => {
+                const productName = row.dataset.productName;
+                const quantityInput = row.querySelector('.quantity-input');
+                const minusBtn = row.querySelector('.minus-btn');
+                const plusBtn = row.querySelector('.plus-btn');
+                const removeBtn = row.querySelector('.remove-item-btn');
 
+                minusBtn.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 0) {
+                        updateCart(productName, currentValue - 1);
+                    }
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue < 10) {
+                        updateCart(productName, currentValue + 1);
+                    }
+                });
+
+                quantityInput.addEventListener('change', () => {
+                    let value = parseInt(quantityInput.value);
+                    if (isNaN(value) || value < 0) value = 0;
+                    if (value > 10) value = 10;
+                    updateCart(productName, value);
+                });
+
+                removeBtn.addEventListener('click', () => {
+                    updateCart(productName, 0);
+                });
+            });
+
+            function updateCart(productName, quantity) {
+                fetch(`/update_cart/${productName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity: quantity }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        console.error('Error updating cart:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </body>
 </html>

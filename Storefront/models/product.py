@@ -5,6 +5,10 @@ class Product:
         self.price = price
         self.stock = stock
 
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data['name'], data['description'], data['price'], data['stock'])
+
     def to_dict(self):
         return{
             "name": self.name,
