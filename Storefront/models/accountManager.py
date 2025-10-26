@@ -11,6 +11,10 @@ class AccountManager:
             with open(filename, "w") as f:
                 json.dump({"users": {}, "admins": {}}, f, indent=4)
 
+            # Create default admin when generating file
+            default_admin = Admin("Admin", "User", "admin@example.com", "admin")
+            self.create_admin(default_admin)
+
     #Opens file and returns json
     def load_accounts(self):
         with open(self.filename, "r") as f:
