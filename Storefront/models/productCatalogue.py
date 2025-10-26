@@ -27,6 +27,10 @@ class ProductCatalogue:
             data = json.load(f)
         return {k: Product.from_dict(v) for k, v in data["products"].items()}
 
+    def get_all_products(self):
+        """Retrieve all products from the catalogue."""
+        return self.load_products()
+
     def get_product(self, product_name: str) -> Product | None:
         """Retrieve a single product by its name."""
         products = self.load_products()
@@ -34,3 +38,25 @@ class ProductCatalogue:
             if product.name == product_name:
                 return product
         return None
+
+    def delete_product(self, product_name):
+        products = self.load_products()
+        products = {k: v for k, v in products.items() if v.name != product_name}
+        self.save_products(products)
+        return True
+
+    def update_product_details(self, product_name, price, stock, is_available):
+        products = self.load_products()
+        for product in products.values():
+            if product.name == product_name:
+                product.price = price
+                product.stock = stock
+                product.is_available = is_available
+                break
+        self.save_products(products)
+
+
+    def save_products(self, products):
+        data = {"products": {k: v.to_dict() for k, v in products.items()}}
+        with open(self.filename, "w") as f:
+            json.dump(data, f, indent=4)

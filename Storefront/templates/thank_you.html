@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Online Convenience Store</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            {% if session.get('role') == 'user' %}
+                <a href="{{ url_for('cart') }}">Cart</a>
+                <a href="{{ url_for('userDashboard') }}">Account</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session.get('role') == 'admin' %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('cart') }}">Cart</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="thank-you-page">
+            <h1>Thank You for Your Order!</h1>
+            <p>Your order has been successfully placed. A confirmation email has been sent to you.</p>
+            
+            {% if order %}
+                <h2>Order Summary</h2>
+                <div class="order-summary-box">
+                    <div class="summary-row">
+                        <span>Order ID</span>
+                        <span>{{ order.order_id }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Date</span>
+                        <span>{{ order.date.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>${{ "%.2f"|format(order.total) }}</span>
+                    </div>
+                </div>
+            {% endif %}
+
+            <a href="{{ url_for('home') }}" class="btn">Continue Shopping</a>
+        </div>
+    </div>
+</body>
+</html>

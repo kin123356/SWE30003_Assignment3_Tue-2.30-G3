@@ -30,6 +30,21 @@ class OrderManager:
         orders.append(order_dict)
         self.save_orders(orders)
 
+    def get_order_by_id(self, order_id):
+        """Retrieve a single order by its ID."""
+        orders = self.load_orders()
+        for order_data in orders:
+            if order_data['order_id'] == order_id:
+                # Reconstruct the Order object
+                return Order(
+                    user_id=order_data['user_id'],
+                    items=order_data['items'],
+                    total=order_data['total'],
+                    order_id=order_data['order_id'],
+                    status=order_data['status']
+                )
+        return None
+
     def update_order_status(self, order_id, status):
         """Update the status of a specific order."""
         with open(self.filename, 'r+') as f:

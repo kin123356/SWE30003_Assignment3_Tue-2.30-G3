@@ -11,14 +11,14 @@
         <h1>Online Convenience Store</h1>
         <nav>
             <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('cart') }}">Cart</a>
-            {% if 'first_name' in session %}
+            {% if session.get('role') == 'user' %}
+                <a href="{{ url_for('cart') }}">Cart</a>
                 <a href="{{ url_for('userDashboard') }}">Account</a>
-                {% if session.get('role') == 'admin' %}
-                    <a href="{{ url_for('adminDashboard') }}">Admin</a>
-                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session.get('role') == 'admin' %}
                 <a href="{{ url_for('logout') }}">Logout</a>
             {% else %}
+                <a href="{{ url_for('cart') }}">Cart</a>
                 <a href="{{ url_for('login') }}">Login</a>
             {% endif %}
         </nav>
@@ -70,9 +70,7 @@
                         <span>Subtotal</span>
                         <span id="subtotal">${{ "%.2f"|format(total) }}</span>
                     </div>
-                    <form action="{{ url_for('checkout') }}" method="post">
-                        <button type="submit" class="btn">Proceed to Checkout</button>
-                    </form>
+                    <a href="{{ url_for('checkout') }}" class="btn">Proceed to Checkout</a>
                 </div>
             </div>
         {% else %}

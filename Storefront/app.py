@@ -14,13 +14,14 @@ from models.inventory import Inventory
 from models.salesAnalytics import SalesAnalytics
 from models.notificationSystem import NotificationSystem
 
-account_manager = AccountManager()
-catalogue = ProductCatalogue()
-catalogue_manager = CatalogueManager()
-order_manager = OrderManager()
+# Initialize managers
+catalogue_manager = ProductCatalogue() # Correctly instantiate the object
+catalogue = catalogue_manager # Maintain compatibility with other code
 inventory = Inventory()
-sales_analytics = SalesAnalytics()
+account_manager = AccountManager()
+order_manager = OrderManager()
 notification_system = NotificationSystem()
+sales_analytics = SalesAnalytics()
 
 app = Flask(__name__)
 app.secret_key = "test"
@@ -31,7 +32,8 @@ def home():
         # Initialize cart for new sessions
         cart = ShoppingCart()
         session['cart'] = cart.items
-    products = catalogue.load_products()
+    all_products = catalogue.get_all_products()
+    products = {name: product for name, product in all_products.items() if product.is_available}
     cart_items = session.get('cart', {})
     return render_template("index.html", products=products, cart_items=cart_items)
 
@@ -118,14 +120,14 @@ def adminDashboard():
                 flash("Product already exists")              
 
         
-        # Handle updating stock
-        elif "update_stock" in request.form:
-            product_id = request.form["product_id"]
-            quantity = int(request.form["quantity"])
-            inventory.set_stock(product_id, quantity)
-            flash("Product stock updated successfully!")
-        
-        #Handle deleting product
+        elif 'update_product' in request.form:
+            product_name = request.form['product_name']
+            price = float(request.form['price'])
+            stock = int(request.form['stock'])
+            is_available = 'is_available' in request.form
+            catalogue_manager.update_product_details(product_name, price, stock, is_available)
+            flash(f"Product '{product_name}' updated successfully!")
+
         elif "create_admin" in request.form:
             first_name = request.form["admin_first_name"]
             last_name = request.form["admin_last_name"]
@@ -137,27 +139,26 @@ def adminDashboard():
             else:
                 flash("An account with this email already exists.")
 
-        elif "delete_product" in request.form:
-            product_name = request.form["product_id"]
-            success = catalogue_manager.delete_product(product_name)
-            if success:
-                flash(f"Product '{product_name}' deleted successfully")
-            else:
-                flash("Product not found")
+        elif 'delete_product' in request.form:
+            product_name = request.form['product_name']
+            catalogue_manager.delete_product(product_name)
+            flash(f"Product '{product_name}' deleted successfully.")
 
         return redirect(url_for("adminDashboard"))
 
-    # Analytics
-    total_sales = sales_analytics.get_total_sales()
-    top_products = sales_analytics.get_top_selling_products()
+    # Analytics for the last 30 days
+    total_sales_30d = sales_analytics.get_total_sales_last_30_days()
+    total_orders_30d = sales_analytics.get_total_orders_last_30_days()
+    top_products = sales_analytics.get_top_selling_products() # This remains all-time
 
     # Show all products on the dashboard
     products = catalogue_manager.load_products()
     return render_template(
-        "adminDashboard.html", 
-        first_name=session["first_name"], 
+        "adminDashboard.html",
+        first_name=session["first_name"],
         products=products,
-        total_sales=total_sales,
+        total_sales_30d=total_sales_30d,
+        total_orders_30d=total_orders_30d,
         top_products=top_products
     )
 
@@ -191,11 +192,11 @@ def update_cart(product_name):
     session['cart'] = cart.items
     return jsonify({'success': True, 'cart': cart.items})
 
-@app.route("/checkout", methods=["POST"])
+@app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if session.get('role') != 'user':
-        flash("Only users can check out.")
-        return redirect(url_for('home'))
+        flash("Please log in to proceed.")
+        return redirect(url_for('login'))
 
     cart = ShoppingCart()
     cart.items = session.get('cart', {})
@@ -203,42 +204,57 @@ def checkout():
         flash("Your cart is empty.")
         return redirect(url_for('cart'))
 
-    # Decrease stock for each item in the cart
-    for item in cart.get_items():
-        inventory.update_stock(item['product']['name'], -item['quantity'])
+    if request.method == 'POST':
+        # All logic for processing the order is now here
+        address = request.form['address']
 
-    # Create a new order
-    order = Order(
-        user_id=session['email'],
-        items=[{'product': Product.from_dict(item['product']), 'quantity': item['quantity']} for item in cart.get_items()],
-        total=cart.calculate_total()
-    )
-    order_manager.place_order(order)
+        # Decrease stock
+        for item in cart.get_items():
+            inventory.update_stock(item['product']['name'], -item['quantity'])
 
-    # Send order confirmation notification
-    if 'email' in session:
-        notification_system.send_order_confirmation(session['email'], order.order_id)
+        # Create order
+        order = Order(
+            user_id=session['email'],
+            items=[{'product': Product.from_dict(item['product']), 'quantity': item['quantity']} for item in cart.get_items()],
+            total=cart.calculate_total()
+        )
+        order_manager.place_order(order)
 
-    # Simulate payment processing
-    payment = Payment(order.order_id, order.total)
-    if payment.process_payment():
-        order_manager.update_order_status(order.order_id, 'Paid')
+        # Notifications
+        if 'email' in session:
+            notification_system.send_order_confirmation(session['email'], order.order_id)
 
-        # Simulate shipment creation
-        # In a real app, you'd get the address from the user
-        shipment = Shipment(order.order_id, '123 Example St')
-        if shipment.create_shipment():
-            order_manager.update_order_status(order.order_id, 'Shipped')
-            if 'email' in session:
-                notification_system.send_shipment_notification(session['email'], order.order_id, shipment.shipment_id)
+        # Payment and shipment simulation
+        payment = Payment(order.order_id, order.total)
+        if payment.process_payment():
+            order_manager.update_order_status(order.order_id, 'Paid')
+            shipment = Shipment(order.order_id, address)
+            if shipment.create_shipment():
+                order_manager.update_order_status(order.order_id, 'Shipped')
+                if 'email' in session:
+                    notification_system.send_shipment_notification(session['email'], order.order_id, shipment.shipment_id)
 
+        # Clear cart
+        cart.clear_cart()
+        session['cart'] = cart.items
 
-    # Clear the cart
-    cart.clear_cart()
-    session['cart'] = cart.items
+        return redirect(url_for('thank_you', order_id=order.order_id))
 
-    flash("Your order has been placed successfully!")
-    return redirect(url_for('userDashboard'))
+    # For a GET request, just show the checkout page
+    total = cart.calculate_total()
+    return render_template('checkout.html', total=total)
+
+@app.route('/thank_you/<order_id>')
+def thank_you(order_id):
+    if 'role' not in session:
+        return redirect(url_for('login'))
+
+    order = order_manager.get_order_by_id(order_id)
+    if not order or order.user_id != session['email']:
+        flash("Order not found.")
+        return redirect(url_for('home'))
+
+    return render_template('thank_you.html', order=order)
 
 @app.route("/logout")
 def logout():

@@ -11,14 +11,14 @@
         <h1>Online Convenience Store</h1>
         <nav>
             <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('cart') }}">Cart</a>
-            {% if 'first_name' in session %}
+            {% if session.get('role') == 'user' %}
+                <a href="{{ url_for('cart') }}">Cart</a>
                 <a href="{{ url_for('userDashboard') }}">Account</a>
-                {% if session.get('role') == 'admin' %}
-                    <a href="{{ url_for('adminDashboard') }}">Admin</a>
-                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session.get('role') == 'admin' %}
                 <a href="{{ url_for('logout') }}">Logout</a>
             {% else %}
+                <a href="{{ url_for('cart') }}">Cart</a>
                 <a href="{{ url_for('login') }}">Login</a>
             {% endif %}
         </nav>
@@ -35,9 +35,8 @@
                     {% if 'first_name' in session %}
                         {% set item_in_cart = cart_items.get(product.name) %}
                         
-                        <button class="btn add-to-cart-btn {{ 'd-none' if item_in_cart }}">Add to Cart</button>
-                        
-                        <div class="quantity-selector {{ 'visible' if item_in_cart }}">
+                        <button class="btn add-to-cart-btn {{ 'd-none' if item_in_cart else '' }}">Add to Cart</button>
+                        <div class="quantity-selector {{ 'd-none' if not item_in_cart else '' }}">
                             <button class="quantity-btn minus-btn">-</button>
                             <input type="number" class="quantity-input" value="{{ item_in_cart.quantity if item_in_cart else 0 }}" min="0" max="10">
                             <button class="quantity-btn plus-btn">+</button>
@@ -64,8 +63,8 @@
 
                 addToCartBtn.addEventListener('click', () => {
                     updateCart(productName, 1, () => {
-                        addToCartBtn.style.display = 'none';
-                        quantitySelector.style.display = 'flex';
+                        addToCartBtn.classList.add('d-none');
+                        quantitySelector.classList.remove('d-none');
                         quantityInput.value = 1;
                     });
                 });
@@ -76,8 +75,8 @@
                         updateCart(productName, currentValue - 1, () => {
                             quantityInput.value = currentValue - 1;
                             if (currentValue - 1 === 0) {
-                                addToCartBtn.style.display = 'block';
-                                quantitySelector.style.display = 'none';
+                                addToCartBtn.classList.remove('d-none');
+                                quantitySelector.classList.add('d-none');
                             }
                         });
                     }
@@ -100,8 +99,11 @@
                     updateCart(productName, value, () => {
                         quantityInput.value = value;
                         if (value === 0) {
-                            addToCartBtn.style.display = 'block';
-                            quantitySelector.style.display = 'none';
+                            addToCartBtn.classList.remove('d-none');
+                            quantitySelector.classList.add('d-none');
+                        } else {
+                            addToCartBtn.classList.add('d-none');
+                            quantitySelector.classList.remove('d-none');
                         }
                     });
                 });

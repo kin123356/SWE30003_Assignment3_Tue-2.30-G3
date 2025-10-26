@@ -26,6 +26,42 @@
             "total": 5.0,
             "date": "2025-10-26T20:53:11.185830",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761481256",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": 0
+                    },
+                    "quantity": 3
+                },
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -2
+                    },
+                    "quantity": 2
+                },
+                {
+                    "product": {
+                        "name": "Eggs",
+                        "description": "4 Large Eggs",
+                        "price": 7.0,
+                        "stock": 4
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 20.0,
+            "date": "2025-10-26T20:20:56.803251",
+            "status": "Shipped"
         }
     ]
 }
