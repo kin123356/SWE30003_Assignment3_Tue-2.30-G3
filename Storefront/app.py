@@ -163,8 +163,8 @@ def adminDashboard():
 
 @app.route("/update_cart/<product_name>", methods=["POST"])
 def update_cart(product_name):
-    if 'first_name' not in session:
-        return jsonify({'error': 'Please log in to modify your cart.'}), 401
+    if session.get('role') != 'user':
+        return jsonify({'error': 'Only users can modify the cart.'}), 403
 
     data = request.get_json()
     quantity = int(data.get('quantity', 0))
@@ -193,8 +193,9 @@ def update_cart(product_name):
 
 @app.route("/checkout", methods=["POST"])
 def checkout():
-    if 'first_name' not in session:
-        return redirect(url_for('login'))
+    if session.get('role') != 'user':
+        flash("Only users can check out.")
+        return redirect(url_for('home'))
 
     cart = ShoppingCart()
     cart.items = session.get('cart', {})
