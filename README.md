@@ -46,15 +46,7 @@ python -m venv venv
 .\venv\Scripts\activate
 ```
 
-### 4. Install Dependencies
-
-Once the virtual environment is active, install the necessary Python packages using the `requirements.txt` file:
-
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Run the Application
+### 4. Run the Application
 
 With the dependencies installed, you can now run the Flask development server:
 
