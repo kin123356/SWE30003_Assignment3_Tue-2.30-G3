@@ -105,6 +105,25 @@
             "total": 9.0,
             "date": "2025-10-26T21:57:06.592401",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761487190",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": -9,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 3.0,
+            "date": "2025-10-27T00:59:50.276123",
+            "status": "Shipped"
         }
     ]
 }
