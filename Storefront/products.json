@@ -4,21 +4,21 @@
             "name": "Bread",
             "description": "A Loaf of Bread",
             "price": 3.0,
-            "stock": -10,
+            "stock": 6,
             "is_available": true
         },
         "2": {
             "name": "Cheese",
             "description": "1 Block of Cheese",
             "price": 2.0,
-            "stock": -7,
+            "stock": -6,
             "is_available": true
         },
         "3": {
             "name": "Eggs",
-            "description": "4 Large Eggs",
+            "description": "A Carton of Eggs",
             "price": 7.0,
-            "stock": 1,
+            "stock": 3,
             "is_available": true
         },
         "4": {

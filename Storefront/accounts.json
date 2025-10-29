@@ -6,6 +6,20 @@
             "email": "khanhhuyenn035@gmail.com",
             "phone": "0413402211",
             "password": "12345678"
+        },
+        "t": {
+            "first_name": "t",
+            "last_name": "t",
+            "email": "t",
+            "phone": "t",
+            "password": "t"
+        },
+        "test@test.com": {
+            "first_name": "test",
+            "last_name": "test",
+            "email": "test@test.com",
+            "phone": "0000000000",
+            "password": "test"
         }
     },
     "admins": {

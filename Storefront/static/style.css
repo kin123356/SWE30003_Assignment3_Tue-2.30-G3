@@ -425,3 +425,26 @@ header nav a:hover {
 .thank-you-page .btn {
     margin-top: 20px;
 }
+
+.receipt-display {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    gap: 2px;
+    padding: 10px;
+    width: max-content;
+    margin: 20px auto;
+}
+
+.receipt-display h2,
+.receipt-display h3,
+.receipt-display h4,
+.receipt-display p,
+.receipt-display span,
+.receipt-display ul {
+    margin: 10px 0; /* reduce top/bottom margin */
+}
+
+

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Online Convenience Store</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            {% if session.get('role') == 'user' %}
+                <a href="{{ url_for('cart') }}">Cart</a>
+                <a href="{{ url_for('userDashboard') }}">Account</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session.get('role') == 'admin' %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('cart') }}">Cart</a>
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="receipt-display">
+        <h2>Receipt for Order #{{ receipt.order_id }}</h2>
+        <h3>Customer ID #{{ receipt.user_id }}</h3>
+        <span>Date of Purchase: {{ receipt.date }}</span>
+
+        <h4>Items</h4>
+        <ul>
+            {% for item in receipt.items %}
+                <li>{{ item['product']['name'] }} x{{ item['quantity'] }} (${{ "%.2f"|format(item['product']['price'])}})</li>
+            {% endfor %}
+        </ul>
+
+        <p>Total: ${{ "%.2f"|format(receipt.total) }}</p>
+    </div>
+
+</body>
+</html>

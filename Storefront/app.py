@@ -13,10 +13,11 @@ from models.shipment import Shipment
 from models.inventory import Inventory
 from models.salesAnalytics import SalesAnalytics
 from models.notificationSystem import NotificationSystem
+from models.receipt import Receipt
 
 # Initialize managers
-catalogue_manager = ProductCatalogue() # Correctly instantiate the object
-catalogue = catalogue_manager # Maintain compatibility with other code
+product_catalogue = ProductCatalogue() # Correctly instantiate the object
+catalogue_manager = CatalogueManager() # Maintain compatibility with other code
 inventory = Inventory()
 account_manager = AccountManager()
 order_manager = OrderManager()
@@ -32,7 +33,7 @@ def home():
         # Initialize cart for new sessions
         cart = ShoppingCart()
         session['cart'] = cart.items
-    all_products = catalogue.get_all_products()
+    all_products = product_catalogue.get_all_products()
     products = {name: product for name, product in all_products.items() if product.is_available}
     cart_items = session.get('cart', {})
     return render_template("index.html", products=products, cart_items=cart_items)
@@ -170,7 +171,7 @@ def update_cart(product_name):
     data = request.get_json()
     quantity = int(data.get('quantity', 0))
 
-    product = catalogue.get_product(product_name)
+    product = product_catalogue.get_product(product_name)
     if not product:
         return jsonify({'error': 'Product not found.'}), 404
 
@@ -203,7 +204,7 @@ def checkout():
     if not cart.get_items():
         flash("Your cart is empty.")
         return redirect(url_for('cart'))
-
+    
     if request.method == 'POST':
         # All logic for processing the order is now here
         address = request.form['address']
@@ -222,7 +223,7 @@ def checkout():
 
         # Notifications
         if 'email' in session:
-            notification_system.send_order_confirmation(session['email'], order.order_id)
+            flash(notification_system.send_order_confirmation(session['email'], order.order_id))
 
         # Payment and shipment simulation
         payment = Payment(order.order_id, order.total)
@@ -232,7 +233,7 @@ def checkout():
             if shipment.create_shipment():
                 order_manager.update_order_status(order.order_id, 'Shipped')
                 if 'email' in session:
-                    notification_system.send_shipment_notification(session['email'], order.order_id, shipment.shipment_id)
+                    flash(notification_system.send_shipment_notification(session['email'], order.order_id, shipment.shipment_id))
 
         # Clear cart
         cart.clear_cart()
@@ -277,6 +278,16 @@ def cart():
     total = cart.calculate_total()
 
     return render_template("cart.html", first_name=session["first_name"], cart_items=cart_items, total=total)
+
+@app.route("/receipt<order_id>")
+def receipt(order_id):
+    if session.get("role") != "user":
+        return redirect(url_for("home"))
+    
+    order = order_manager.get_order_by_id(order_id)
+    
+    receipt = Receipt(order.to_dict())
+    return render_template("receipt.html", receipt=receipt)
 
 if __name__ == "__main__":
     app.run(debug=True)
