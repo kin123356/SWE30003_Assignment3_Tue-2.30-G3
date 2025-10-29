@@ -124,6 +124,25 @@
             "total": 3.0,
             "date": "2025-10-27T00:59:50.276123",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761712803",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -6,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 2.0,
+            "date": "2025-10-29T15:40:03.751415",
+            "status": "Shipped"
         }
     ]
 }
