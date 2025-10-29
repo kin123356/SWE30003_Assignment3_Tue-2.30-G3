@@ -4,7 +4,19 @@ from models.user import User
 from models.admin import Admin
 
 class AccountManager:
+    _instance = None
+
+    #Singleton Pattern (Only one AccountManager can exist)
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self, filename="accounts.json"):
+        if self._initialized:
+            return
+        self._initialized = True
         self.filename= filename
         #Checks if accounts file exists and creates it if not
         if not os.path.exists(filename):

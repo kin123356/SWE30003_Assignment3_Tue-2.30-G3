@@ -98,15 +98,15 @@
                     <input type="hidden" name="create_admin">
                     <div class="form-group">
                         <label for="admin_first_name">First Name</label>
-                        <input type="text" id="admin_first_name" name="admin_first_name" required>
+                        <input type="text" id="admin_first_name" name="admin_first_name" pattern="[A-Za-z]+" title="Can only contain letters" required>
                     </div>
                     <div class="form-group">
                         <label for="admin_last_name">Last Name</label>
-                        <input type="text" id="admin_last_name" name="admin_last_name" required>
+                        <input type="text" id="admin_last_name" name="admin_last_name" pattern="[A-Za-z]+" title="Can only contain letters" required>
                     </div>
                     <div class="form-group">
                         <label for="admin_email">Email</label>
-                        <input type="text" id="admin_email" name="admin_email" required>
+                        <input type="text" id="admin_email" name="admin_email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Enter a valid email, e.g., user@example.com" required>
                     </div>
                     <div class="form-group">
                         <label for="admin_password">Password</label>

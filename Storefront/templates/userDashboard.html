@@ -35,6 +35,7 @@
                         <th>Date</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th>Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,7 @@
                             <td>{{ order.date }}</td>
                             <td>${{ "%.2f"|format(order.total) }}</td>
                             <td>{{ order.status }}</td>
+                            <td><a href="{{ url_for('receipt', order_id=order.order_id) }}"><button>View Receipt</button></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
