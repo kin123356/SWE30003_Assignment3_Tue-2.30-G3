@@ -1,5 +1,6 @@
 import datetime
 from models.product import Product
+from models.receipt import Receipt
 
 class Order:
     def __init__(self, user_id, items, total, order_id=None, date=None, status="Pending"):
@@ -46,3 +47,7 @@ class Order:
             date=datetime.datetime.fromisoformat(data['date']),
             status=data['status']
         )
+    
+    def create_receipt(self):
+        return Receipt(self.to_dict())
+        

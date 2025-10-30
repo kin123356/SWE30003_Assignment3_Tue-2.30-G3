@@ -13,7 +13,6 @@ from models.shipment import Shipment
 from models.inventory import Inventory
 from models.salesAnalytics import SalesAnalytics
 from models.notificationSystem import NotificationSystem
-from models.receipt import Receipt
 
 # Initialize managers
 product_catalogue = ProductCatalogue() # Correctly instantiate the object
@@ -212,6 +211,7 @@ def checkout():
         # Decrease stock
         for item in cart.get_items():
             inventory.update_stock(item['product']['name'], -item['quantity'])
+            inventory.update_availability(item['product']['name'])
 
         # Create order
         order = Order(
@@ -285,8 +285,8 @@ def receipt(order_id):
         return redirect(url_for("home"))
     
     order = order_manager.get_order_by_id(order_id)
-    
-    receipt = Receipt(order.to_dict())
+    receipt = order.create_receipt()
+
     return render_template("receipt.html", receipt=receipt)
 
 if __name__ == "__main__":

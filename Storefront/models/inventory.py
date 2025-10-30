@@ -36,3 +36,17 @@ class Inventory:
             f.seek(0)
             f.truncate()
             json.dump(data, f, indent=4)
+    
+    def update_availability(self, product_name):
+        with open(self.filename, "r+") as f:
+            data = json.load(f)
+            for product_id, product_data in data['products'].items():
+                if product_data['name'] == product_name:
+                    product_data['is_available'] = product_data['stock'] > 0
+                    break
+            f.seek(0)
+            f.truncate()
+            json.dump(data, f, indent=4)
+
+
+

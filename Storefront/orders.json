@@ -143,6 +143,131 @@
             "total": 2.0,
             "date": "2025-10-29T15:40:03.751415",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761819004",
+            "user_id": "test@test.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Bread",
+                        "description": "A Loaf of Bread",
+                        "price": 3.0,
+                        "stock": 6,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                },
+                {
+                    "product": {
+                        "name": "Carrot",
+                        "description": "1kg of Carrots",
+                        "price": 1.5,
+                        "stock": 11,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                },
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": -7,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                },
+                {
+                    "product": {
+                        "name": "Eggs",
+                        "description": "A Carton of Eggs",
+                        "price": 7.0,
+                        "stock": 3,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 13.5,
+            "date": "2025-10-30T21:10:04.922145",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761821299",
+            "user_id": "test@test.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": 6,
+                        "is_available": true
+                    },
+                    "quantity": 6
+                }
+            ],
+            "total": 12.0,
+            "date": "2025-10-30T21:48:19.806582",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761821487",
+            "user_id": "test@test.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": 0,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 2.0,
+            "date": "2025-10-30T21:51:27.582973",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761821515",
+            "user_id": "test@test.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Carrot",
+                        "description": "1kg of Carrots",
+                        "price": 1.5,
+                        "stock": 10,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 1.5,
+            "date": "2025-10-30T21:51:55.703382",
+            "status": "Shipped"
+        },
+        {
+            "order_id": "1761822206",
+            "user_id": "test@test.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": 6,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 2.0,
+            "date": "2025-10-30T22:03:26.814107",
+            "status": "Shipped"
         }
     ]
 }

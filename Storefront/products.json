@@ -4,28 +4,28 @@
             "name": "Bread",
             "description": "A Loaf of Bread",
             "price": 3.0,
-            "stock": 6,
+            "stock": 5,
             "is_available": true
         },
         "2": {
             "name": "Cheese",
             "description": "1 Block of Cheese",
             "price": 2.0,
-            "stock": -7,
+            "stock": 5,
             "is_available": true
         },
         "3": {
             "name": "Eggs",
             "description": "A Carton of Eggs",
             "price": 7.0,
-            "stock": 3,
+            "stock": 2,
             "is_available": true
         },
         "4": {
             "name": "Carrot",
             "description": "1kg of Carrots",
             "price": 1.5,
-            "stock": 11,
+            "stock": 9,
             "is_available": true
         }
     }
