@@ -11,14 +11,14 @@
             "name": "Cheese",
             "description": "1 Block of Cheese",
             "price": 2.0,
-            "stock": 5,
+            "stock": 4,
             "is_available": true
         },
         "3": {
             "name": "Eggs",
             "description": "A Carton of Eggs",
             "price": 7.0,
-            "stock": 2,
+            "stock": 1,
             "is_available": true
         },
         "4": {

@@ -268,6 +268,35 @@
             "total": 2.0,
             "date": "2025-10-30T22:03:26.814107",
             "status": "Shipped"
+        },
+        {
+            "order_id": "1761823163",
+            "user_id": "khanhhuyenn035@gmail.com",
+            "items": [
+                {
+                    "product": {
+                        "name": "Cheese",
+                        "description": "1 Block of Cheese",
+                        "price": 2.0,
+                        "stock": 5,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                },
+                {
+                    "product": {
+                        "name": "Eggs",
+                        "description": "A Carton of Eggs",
+                        "price": 7.0,
+                        "stock": 2,
+                        "is_available": true
+                    },
+                    "quantity": 1
+                }
+            ],
+            "total": 9.0,
+            "date": "2025-10-30T22:19:23.781662",
+            "status": "Shipped"
         }
     ]
 }
