@@ -448,3 +448,8 @@ header nav a:hover {
 }
 
 
+.flash{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
